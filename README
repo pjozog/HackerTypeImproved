@@ -1,4 +1,4 @@
-Only works on Unix/Linux systems with /usr/sbin/adduser installed (by default on Ubuntu)
+Only works on Unix/Linux systems.
 
 Quit the frantic hacking session by pressing backquote (`) then Ctrl-C.
 

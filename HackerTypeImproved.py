@@ -5,7 +5,7 @@ import sys
 import time
 from threading import Thread
 
-CHARS_PER_KEYPRESS = 10
+CHARS_PER_KEYPRESS = 30
 
 #Reads a character from stdin, but doesn't echo to terminal
 class GetCharUnix:
@@ -75,10 +75,10 @@ class HackerType:
 
         while True:
             if (len(self.queue.l) > 0):
-                printer = HackerTypePrinter(self.__repr__())
+                printer = HackerTypePrinter(self.__repr__(), .005)
                 printer.write()
                 self.queue.l.pop()
 
 if __name__ == '__main__':
-    hackerType = HackerType('/usr/sbin/adduser')
+    hackerType = HackerType('HackerTypeImproved.py')
     hackerType.run()
