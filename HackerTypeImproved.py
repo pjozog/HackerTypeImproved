@@ -22,7 +22,7 @@ screen."""
         except ImportError:
             try:
                 self.impl = GetCharMacCarbon()
-            except AttributeError:
+            except Exception, e:
                 self.impl = GetCharUnix()
 
     def __call__(self): return self.impl()
@@ -94,7 +94,7 @@ class HackerTypeQueue(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.l = []
-        self.getChar = GetCharUnix()
+        self.getChar = GetChar()
 
     def run(self):
         while True:
@@ -109,7 +109,6 @@ class HackerType:
         self._filecontent = self.file.readlines()
         self._filecontent = ''.join(self._filecontent)
         self._counter = 0
-        self._getChar = GetCharUnix()
         self.queue = HackerTypeQueue()
 
     def __repr__(self):
@@ -136,5 +135,6 @@ if __name__ == '__main__':
         hackerType = HackerType(sys.argv[1])
     except Exception, e:
         print 'Usage: %s <input file>' % sys.argv[0]
+        print e
         sys.exit(1)
     hackerType.run()
