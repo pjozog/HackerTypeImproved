@@ -140,4 +140,8 @@ if __name__ == '__main__':
         hackerType.run()
     except ClassNotFound, e:
         print 'Error: %s does not appear to be source code.' % infile
-        print '...How can you hack without source code?'
+        print 'How can you hack without source code?'
+        print
+        print
+        print
+        print '...idiot.'
