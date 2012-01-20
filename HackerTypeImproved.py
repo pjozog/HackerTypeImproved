@@ -6,6 +6,7 @@ import time
 from threading import Thread
 
 from pygments import highlight
+from pygments.util import ClassNotFound
 from pygments.lexers import get_lexer_for_filename
 from pygments.lexers import PythonLexer
 from pygments.formatters import TerminalFormatter
@@ -74,8 +75,8 @@ class GetCharWindows:
 
 #Prints a string, character by character
 class HackerTypePrinter:
-    def __init__(self, string, lexer, delay=.02):
-        self.string = highlight(string, lexer, TerminalFormatter()).strip('\n');
+    def __init__(self, string, delay=.02):
+        self.string = string
         self.delay = delay
 
     def __repr__(self):
@@ -106,8 +107,10 @@ class HackerTypeQueue(Thread):
 class HackerType:
     def __init__(self, fileName):
         self.file = open(fileName, 'r')
-        self._filecontent = self.file.readlines()
-        self._filecontent = ''.join(self._filecontent)
+        lexer = get_lexer_for_filename(self.file.name)
+        self._filecontent = highlight(''.join(self.file.readlines()),
+                                      lexer,
+                                      TerminalFormatter())
         self._counter = 0
         self.queue = HackerTypeQueue()
 
@@ -119,22 +122,22 @@ class HackerType:
     def run(self):
         self.queue.start()
 
-        try:
-            lexer = get_lexer_for_filename(self.file.name)
-        except Exception, e:
-            lexer = PythonLexer()
-
         while True:
             if (len(self.queue.l) > 0):
-                printer = HackerTypePrinter(self.__repr__(), lexer, .001)
+                printer = HackerTypePrinter(self.__repr__(), .001)
                 printer.write()
                 self.queue.l.pop()
 
 if __name__ == '__main__':
+
+    if len(sys.argv) == 1:
+        infile = sys.argv[0]
+    else:
+        infile = sys.argv[1]
+
     try:
-        hackerType = HackerType(sys.argv[1])
-    except Exception, e:
-        print 'Usage: %s <input file>' % sys.argv[0]
-        print e
-        sys.exit(1)
-    hackerType.run()
+        hackerType = HackerType(infile)
+        hackerType.run()
+    except ClassNotFound, e:
+        print 'Error: %s does not appear to be source code.' % infile
+        print '...How can you hack without source code?'
